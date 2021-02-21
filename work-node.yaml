@@ -1,0 +1,30 @@
+Parameters:
+  ImageId:
+    Type: AWS::EC2::Image::Id
+    Default: ami-0d767dd04ac152743
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: cks
+  SshSourceCidr:
+    Type: String
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+        Ref: ImageId
+      InstanceType: t2.medium
+      KeyName:
+        Ref: KeyName
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allows SSH
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp:
+            Ref: SshSourceCidr
