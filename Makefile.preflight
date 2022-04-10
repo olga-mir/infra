@@ -3,14 +3,8 @@
 # This target is run before every other target and will block its execution if anything is amiss
 .PHONY: check-setup
 check-setup:
-ifndef AWS_PROFILE
-	$(error AWS_PROFILE is undefined)
-endif
 ifndef AWS_REGION
 	$(error AWS_REGION is undefined)
-endif
-ifndef CF_TEMPLATE_BUCKET_NAME
-	$(error CF_TEMPLATE_BUCKET_NAME is undefined. Please provide bucket name to store CloudFormation stack file)
 endif
 	@echo All required env variables are defined
 

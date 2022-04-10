@@ -17,26 +17,34 @@ This project can be deployed in any region.
 Deploy command accepts following parameters:
 
 * `KeyName`
+
 Required: true
+
 Description: The name of the key pair to install on the bastion and the webserver hosts to allow SSH connections.
 
 * `ImageID`
+
 Required: false
+
 Description: Amazon Linux 2 Image AMI ID available in the region where the stack is being deployed. If this parameter is not defined then latest Amazon Linux 2 image will be selected using SSM Parameter Store as described in this [AWS blog post](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/).
 
 * `AdminCIDR`
+
 Required: false
+
 Description: IP range in CIDR notation to alowlist SSH connection from. If not provided then the IP of the machine used to deploy will be used (with /32 netmask).
 
 ## Examples
 
 Minimal command to deploy the project:
 ```bash
-make deploy-stack KeyName=mykey
+make deploy KeyName=mykey
 ```
 
+Provide Admin CIDR and AMI:
+
 ```bash
-make deploy-stack KeyName=mykey AdminCIDR=1.2.3.4/30 ImageID=ami-012feb91d25f5d1b3
+make deploy KeyName=mykey AdminCIDR=1.2.3.4/30 ImageID=ami-012feb91d25f5d1b3
 ```
 
 :warning: note currently VPC and subnets CIDRs are hardcoded as default values in the CloudFormation template and potentially can clash with other VPCs.
@@ -47,13 +55,13 @@ Add following config to the ssh config file (usually at `~/.ssh/config`)
 ```
 Host bastion
    StrictHostKeyChecking no
-   IdentityFile /my/path/to/key
+   IdentityFile /path/to/my/key
    HostName <bastion-public-ip>
    User ec2-user
 
 Host webserver
    StrictHostKeyChecking no
-   IdentityFile /my/path/to/key
+   IdentityFile /path/to/my/key
    HostName <webserver-private-ip>
    User ec2-user
    ProxyCommand ssh -q -W %h:%p bastion
@@ -67,6 +75,16 @@ make get-ips
 connect to webserver using:
 ```bash
 ssh webserver
+```
+
+# Test
+
+Once ssh config is updated, connect and test httpd service is returning content:
+
+```bash
+ssh webserver
+curl localhost
+timedatectl
 ```
 
 # Cleanup

@@ -180,7 +180,7 @@ Resources:
           CidrIp: !Join [ '/', [ !GetAtt Bastion.PrivateIp, '32' ]]
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} SG
+          Value: !Sub ${EnvironmentName} WebServer SG
 
   WebServerRole:
     Type: 'AWS::IAM::Role'
@@ -239,13 +239,9 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: !Ref AdminCIDR
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Sub ${EnvironmentName} Public Subnet
+          Value: !Sub ${EnvironmentName} Bastion SG
 
 
 Outputs:
