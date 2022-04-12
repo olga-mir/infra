@@ -2,9 +2,6 @@
 
 This repository contains AWS CloudFormation template which deploys a VPC with public and private subnets, a work node in private subnet with admin access via [SSM](https://aws.amazon.com/blogs/infrastructure-and-automation/toward-a-bastion-less-world/).
 
-## Solution without bastion:
-https://github.com/olga-mir/infra/pull/1
-
 # Pre-requisites
 
 This project does not use containerised tools, for the lack of time for the project and assumes the tools are installed on the machine that deploys this project:
