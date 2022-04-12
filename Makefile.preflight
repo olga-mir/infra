@@ -11,3 +11,7 @@ endif
 ifeq (, $(shell which aws))
 	$(error "aws cli is required to execute this project")
 endif
+
+ifeq (, $(shell which cfn-lint))
+	$(error "cfn-lint not found")
+endif
