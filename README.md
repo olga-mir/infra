@@ -2,6 +2,9 @@
 
 This repository contains AWS CloudFormation template which deploys a VPC with public and private subnet, a webserver in private subnet and a bastion host for webserver admin access.
 
+## Solution without bastion:
+https://github.com/olga-mir/infra/pull/1
+
 # Pre-requisites
 
 This project does not use containerised tools, for the lack of time for the project and assumes the (very basic) tools are installed on the machine that deploys this project:
@@ -91,12 +94,3 @@ timedatectl
 ```bash
 make cleanup-all
 ```
-
-# Improvements to consider
-
-* Remove bastion host. Bastion is the quickest and most familiar approach to access instance in a private subnet, but it has a lot of drawbacks and there are better ways to connect to hosts (better yet to avoid connecting altogether whenever possible, but that's out of scope).
-* Define minimal IAM role required to deploy and maintain this stack.
-* If still using bastion: add utility command to add addtional adminCIDR blocks and install authorized keys to easily onboard other team members.
-* Expose webserver via DNS. Avoid hardcoding IPs.
-* Parameterise VPC and subnets CIDRs.
-* Many people dislike Makefile, Taskfile seems to be the new hotness which probably going to replace Make. (yay to even more yaml!)
