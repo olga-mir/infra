@@ -143,9 +143,6 @@ Resources:
           timedatectl set-timezone Australia/Brisbane
           yum update -y
           yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-          yum install -y httpd.x86_64
-          systemctl start httpd.service
-          systemctl enable httpd.service
       SubnetId: !Ref PrivateSubnet
       Tags:
         - Key: Name
