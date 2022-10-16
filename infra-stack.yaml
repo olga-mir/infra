@@ -1,5 +1,5 @@
-Description:  This template deploys a VPC, with a public and a private subnets.
-  A work node is deployed in private subnet with access via SSM.
+Description:  This template deploys a VPC, with a public subnets.
+  A work node is deployed in public subnet (but no public IP) with access via SSM.
 
 Parameters:
   EnvironmentName:
@@ -16,11 +16,6 @@ Parameters:
     Description: Public subnet CIDR
     Type: String
     Default: 10.192.10.0/24
-
-  PrivateSubnetCIDR:
-    Description: Private subnet CIDR
-    Type: String
-    Default: 10.192.20.0/24
 
   ImageId:
     Description: Amazon Lunux 2 Image ID
@@ -65,28 +60,6 @@ Resources:
         - Key: Name
           Value: !Sub ${EnvironmentName} Public Subnet
 
-  PrivateSubnet:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      CidrBlock: !Ref PrivateSubnetCIDR
-      MapPublicIpOnLaunch: false
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Subnet
-
-  NatGatewayEIP:
-    Type: AWS::EC2::EIP
-    DependsOn: InternetGatewayAttachment
-    Properties:
-      Domain: vpc
-
-  NatGateway:
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt NatGatewayEIP.AllocationId
-      SubnetId: !Ref PublicSubnet
-
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -109,27 +82,6 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet
 
-  PrivateRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties:
-      VpcId: !Ref VPC
-      Tags:
-        - Key: Name
-          Value: !Sub ${EnvironmentName} Private Route
-
-  DefaultPrivateRoute:
-    Type: AWS::EC2::Route
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable
-      DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway
-
-  PrivateSubnetRouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PrivateRouteTable
-      SubnetId: !Ref PrivateSubnet
-
   WorkNode:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -143,7 +95,7 @@ Resources:
           timedatectl set-timezone Australia/Brisbane
           yum update -y
           yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-      SubnetId: !Ref PrivateSubnet
+      SubnetId: !Ref PublicSubnet
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} Work Node
@@ -181,12 +133,8 @@ Outputs:
     Description: A reference to the public subnet
     Value: !Ref PublicSubnet
 
-  PrivateSubnet:
-    Description: A reference to the private subnet
-    Value: !Ref PrivateSubnet
-
   WorkNodePrivateIP:
-    Description: Public IP of the work node
+    Description: Private IP of the work node
     Value: !GetAtt WorkNode.PrivateIp
 
   WorkNodeInstanceId:
