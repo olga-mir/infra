@@ -91,10 +91,14 @@ Resources:
       UserData:
         Fn::Base64: |
           #!/bin/bash
-          # Use Brisbane tz to set AEST - QLD does not observe DST
-          timedatectl set-timezone Australia/Brisbane
           yum update -y
           yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+          # install docker: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-container-image.html
+          amazon-linux-extras install docker
+          service docker start
+          systemctl enable docker
+          usermod -a -G docker ec2-user
+          usermod -a -G docker ssm-user
       SubnetId: !Ref PublicSubnet
       Tags:
         - Key: Name
