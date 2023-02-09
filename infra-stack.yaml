@@ -24,7 +24,7 @@ Parameters:
   InstanceType:
     Description: EC2 instance type
     Type: String
-    Default: t2.micro
+    Default: t3.medium
 
 Resources:
   VPC:
@@ -88,13 +88,15 @@ Resources:
       ImageId: !Ref ImageId
       InstanceType: !Ref InstanceType
       IamInstanceProfile: !Ref WorkNodeInstanceProfile
+      KeyName: aws
       UserData:
         Fn::Base64: |
           #!/bin/bash
           yum update -y
+          yum install httpd-tools # ab
           yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
           # install docker: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-container-image.html
-          amazon-linux-extras install docker
+          # amazon-linux-extras install docker - amazon-linux-extras removed in AL2022
           service docker start
           systemctl enable docker
           usermod -a -G docker ec2-user
