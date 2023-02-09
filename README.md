@@ -21,21 +21,17 @@ Optionally provide `ImageID`. When `ImageID` is not set then Amazon Linux 2022 A
 
 # Connect
 
-Obtain instanceId. At the end of a successful stack deployment InstanceId is printed on the screen. It can also be retrieved at any time by running:
+At the end of a successful stack deployment InstanceId is printed on the screen. It can also be retrieved at any time by running:
 ```bash
 make get-info
 ```
-
-## From terminal
 
 ```bash
 aws ssm start-session --target <instance-id>
 ```
 [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos) may be needed to run this command.
 
-## From console
-
-Navigate to `AWS Systems Manager` -> `Session Manager` -> `Start Session` and paste in InstanceId.
+To connect from AWS console navigate to `AWS Systems Manager` -> `Session Manager` -> `Start Session` and paste in InstanceId.
 
 # Cleanup
 
@@ -43,7 +39,8 @@ Navigate to `AWS Systems Manager` -> `Session Manager` -> `Start Session` and pa
 make cleanup
 ```
 
-## Amazon Linux 2022
+
+# Amazon Linux 2022
 
 Official documentation [comparison to AL2](https://docs.aws.amazon.com/linux/al2022/ug/compare-al2-to-AL2022.html)
 
@@ -58,6 +55,7 @@ image_stamp="f36f-ebeb"
 image_date="20230126004236"
 recipe_name="al2022 ami"
 recipe_id="2ff6c0a3-055f-75d4-75ff-8eca-d701-6d2b-7fead045"
+sh-5.2$
 sh-5.2$ cat /etc/os-release
 NAME="Amazon Linux"
 VERSION="2022"
