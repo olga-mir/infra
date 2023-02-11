@@ -1,8 +1,8 @@
-# Infra
+# About
 
 This repository contains AWS CloudFormation template which deploys a VPC with public and private subnets, a work node in private subnet with admin access via [SSM](https://aws.amazon.com/blogs/infrastructure-and-automation/toward-a-bastion-less-world/).
 
-# Pre-requisites
+## Pre-requisites
 
 This project does not use containerised tools, for the lack of time for the project and assumes the tools are installed on the machine that deploys this project:
 - AWS CLI
@@ -11,13 +11,13 @@ This project does not use containerised tools, for the lack of time for the proj
 
 The machine must have access to a AWS account with sufficient permissions to deploy cloudformation stacks with IAM capabilities, ec2 permissions.
 
-# Deploy
+## Deploy
 
 ```bash
 make deploy
 ```
 
-`ImageID` parameter can be set to use specific AMI. If not set, Amazon Linux 2022 AMI will be selected using SSM query as described in [AWS blog post](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/).
+`ImageID` parameter can be set to use specific AMI. If not set, Amazon Linux 2022 AMI will be selected using SSM query.
 
 # Connect
 
@@ -36,11 +36,13 @@ make connect
 [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos) may be needed to run this command.
 
 
-# Cleanup
+## Cleanup
 
 ```bash
 make cleanup
 ```
+
+
 
 # Amazon Linux 2022
 
