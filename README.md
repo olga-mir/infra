@@ -19,7 +19,7 @@ make deploy
 
 `ImageID` parameter can be set to use specific AMI. If not set, Amazon Linux 2022 AMI will be selected using SSM query.
 
-# Connect
+## Connect
 
 At the end of a successful deployment `InstanceId` is printed on the screen. Also it can be obtained with `get-info` make target and then connect with `ssm` using:
 
