@@ -22,6 +22,11 @@ get-info:
 deploy: check-setup lint deploy-stack get-info
 
 
+.PHONY: connect
+connect:
+	aws ssm start-session --target $(shell aws cloudformation describe-stacks --stack-name ${STACK_NAME} --query 'Stacks[0].Outputs[?OutputKey==`WorkNodeInstanceId`].OutputValue' --output text)
+
+
 .PHONY: cleanup
 cleanup:
 	aws cloudformation delete-stack --stack-name ${STACK_NAME}

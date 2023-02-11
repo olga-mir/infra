@@ -17,21 +17,24 @@ The machine must have access to a AWS account with sufficient permissions to dep
 make deploy
 ```
 
-Optionally provide `ImageID`. When `ImageID` is not set then Amazon Linux 2022 AMI will be selected using SSM query as described in [AWS blog post](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/).
+`ImageID` parameter can be set to use specific AMI. If not set, Amazon Linux 2022 AMI will be selected using SSM query as described in [AWS blog post](https://aws.amazon.com/blogs/compute/query-for-the-latest-amazon-linux-ami-ids-using-aws-systems-manager-parameter-store/).
 
 # Connect
 
-At the end of a successful stack deployment InstanceId is printed on the screen. It can also be retrieved at any time by running:
-```bash
-make get-info
-```
+At the end of a successful deployment `InstanceId` is printed on the screen. Also it can be obtained with `get-info` make target and then connect with `ssm` using:
 
 ```bash
 aws ssm start-session --target <instance-id>
 ```
+
+The shortcut for the above is `connect`:
+
+```bash
+make connect
+```
+
 [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos) may be needed to run this command.
 
-To connect from AWS console navigate to `AWS Systems Manager` -> `Session Manager` -> `Start Session` and paste in InstanceId.
 
 # Cleanup
 
