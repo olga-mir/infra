@@ -6,10 +6,17 @@ STACK_NAME=dev-infra-stack
 lint:
 	cfn-lint infra-stack.yaml
 
+.PHONY: list-images
+list-images:
+	aws ssm get-parameters-by-path --path /aws/service/ami-amazon-linux-latest/ --query 'Parameters[*].Name' --output table
+
+.PHONY: get-ami
+get-ami:
+	aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64 --region ${AWS_REGION} --query 'Parameters[0].[Value]' --output text
 
 .PHONY: deploy-stack
 deploy-stack: lint check-setup
-	ImageID=$(or $(ImageID), $(shell aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2022-ami-kernel-5.15-x86_64 --region ${AWS_REGION} --query 'Parameters[0].[Value]' --output text)); \
+	ImageID=$(or $(ImageID), $(shell aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64 --region ${AWS_REGION} --query 'Parameters[0].[Value]' --output text)); \
 	aws cloudformation deploy --template-file infra-stack.yaml --stack-name ${STACK_NAME} --parameter-overrides ImageId=$$ImageID --capabilities CAPABILITY_IAM
 
 

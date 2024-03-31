@@ -14,24 +14,27 @@ The machine must have access to a AWS account with sufficient permissions to dep
 ## Deploy
 
 ```bash
-make deploy
+$ make deploy
 ```
 
-`ImageID` parameter can be set to use specific AMI. If not set, Amazon Linux 2022 AMI will be selected using SSM query.
+`ImageID` parameter can be set to use specific AMI. If not set, Amazon Linux 2023 AMI will be selected using SSM query.
+
+Couple tragets that can help stay up-to-date with trendiest images out there (get-ami does use a hard-coded value which is one of the options retreived from list-images):
+
+```bash
+$ make list-images
+$ make get-ami
+```
 
 ## Connect
 
-At the end of a successful deployment `InstanceId` is printed on the screen. Also it can be obtained with `get-info` make target and then connect with `ssm` using:
+At the end of a successful deployment `InstanceId` will be printed to the terminal. It can be retrieved at any stage with `make get-info` or just connect automatically with `ssm`
 
 ```bash
-aws ssm start-session --target <instance-id>
+$ make connect
 ```
 
-The shortcut for the above is `connect`:
-
-```bash
-make connect
-```
+This target uses `ssm` to connect to the instance: `aws ssm start-session --target <instance-id>`
 
 [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos) may be needed to run this command.
 
